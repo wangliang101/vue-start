@@ -7,12 +7,29 @@
   <script src="https://unpkg.com/vue@next"></script>
 </head>
 <body>
-  <div id=''>
-
+  <div id='test'>
+    <span v-once>
+      Message: {{ msg }}
+    </span>
+    <p>Using mustaches: {{ rawHtml }}</p>
+    <p>Using v-html directive: <span v-html="rawHtml"></span></p>
   </div>
 
   <script>
-
+    const Test = {
+      data() {
+        return {
+          msg: 1,
+          rawHtml: `<span style='color:red'>this.should be read</span>`
+        }
+      },
+      mounted() {
+        setInterval(()=>{
+          this.msg++
+        }, 1000)
+      }
+    }
+    Vue.createApp(Test).mount('#test')
   </script>
 </body>
 </html>
