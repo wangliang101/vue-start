@@ -7,12 +7,52 @@
   <script src="https://unpkg.com/vue@next"></script>
 </head>
 <body>
-  <div id=''>
-
+  <div id='test'>
+    <button :title='renderTitle("c")' @click='showValue'>点我啊</button>
+    <save-button></save-button> 
   </div>
-
+  <script src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
   <script>
-
+    // 方法 防抖节流
+    const Test = {
+      data() {
+        return {
+          title1: 'a',
+          title2: 'b'
+        }
+      },
+      methods: {
+        renderTitle(v){
+          return `${this.title1}${this.title2}-${v}`
+        },
+        // showValue(){
+        //   console.log('点击了按钮啊')
+        // }
+        showValue:_.debounce(function(){
+          console.log('点击了按钮啊')
+        }, 1000)
+      },
+    }
+    const app = Vue.createApp(Test)
+    app.component('save-button', {
+      created() {
+        this.debouncedClick = _.debounce(this.click, 2000)
+      },
+      unmounted() {
+        this.debouncedClick.cancel()
+      },
+      methods: {
+        click(){
+          console.log('点击了按钮啊2')
+        }
+      },
+      template: `
+        <button @click="debouncedClick">
+          Save
+        </button>
+      `
+    })
+    app.mount('#test');
   </script>
 </body>
 </html>
