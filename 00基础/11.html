@@ -1,18 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://unpkg.com/vue@next"></script>
-</head>
-<body>
-  <div id=''>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test">
+      <button @click="warn(msg, $event)">event传入</button>
+      <button @click="warn(msg, $event), show()">多事件处理器</button>
+    </div>
 
-  </div>
-
-  <script>
-
-  </script>
-</body>
+    <script>
+      // 事件处理
+      const Test = {
+        data() {
+          return {
+            msg: 'jjj',
+          };
+        },
+        methods: {
+          warn(msg, e) {
+            if (e) {
+              console.log('e', e);
+              e.preventDefault();
+            }
+            console.log('msg', msg);
+          },
+          show() {
+            console.log('show');
+          },
+        },
+      };
+      const vm = Vue.createApp(Test);
+      vm.mount('#test');
+    </script>
+  </body>
 </html>

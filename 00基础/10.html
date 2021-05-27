@@ -1,18 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://unpkg.com/vue@next"></script>
-</head>
-<body>
-  <div id=''>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test">
+      <hr />
+      条件渲染
+      <hr />
+      <h1 v-if="awesome">vue is awesome</h1>
+      <h1 v-else-if="Math.random() > 0.5">ddd</h1>
+      <h1 v-else>hhh</h1>
+      <template v-if="ok">
+        <h1>Title</h1>
+        <p>Paragraph 1</p>
+        <p>Paragraph 2</p>
+      </template>
+      <h2 v-show="awesome">v-show</h2>
+      <hr />
+      列表渲染
+      <hr />
+      <ul>
+        数组
+        <li v-for="(item, index) of items">
+          {{parentMessage}}-{{item.message}}-{{index}}
+        </li>
+        <button @click="changeArr">改变数组</button>
+        对象
+        <li v-for="(value, key, index) of myObject">
+          {{parentMessage}}-{{value}}-{{key}}-{{index}}
+        </li>
+        过滤
+        <li v-for="(value) in numList">{{parentMessage}}-{{value}}</li>
+        在 v-for 里使用值的范围
+        <li v-for="(value) in 3">{{value}}</li>
+        v-for 与 v-if 一同使用
+        <template v-for="todo in numList">
+          <li v-if="todo != 2">{{ todo }}</li>
+        </template>
+      </ul>
+    </div>
 
-  </div>
-
-  <script>
-
-  </script>
-</body>
+    <script>
+      // 条件渲染 列表渲染
+      const Test = {
+        data() {
+          return {
+            awesome: true,
+            ok: false,
+            parentMessage: 'Parent',
+            items: [{ message: 'foo' }, { message: 'bar' }],
+            myObject: {
+              title: 'How to do lists in Vue',
+              author: 'Jane Doe',
+              publishedAt: '2016-04-10',
+            },
+            numList: [1, 2, 3, 4, 5],
+          };
+        },
+        methods: {
+          changeArr() {
+            this.items.push({ message: 'zar' });
+          },
+        },
+        computed: {
+          evenNum() {
+            return this.numList.filters((item) => item % 2 !== 0);
+          },
+        },
+      };
+      const vm = Vue.createApp(Test);
+      vm.mount('#test');
+    </script>
+  </body>
 </html>

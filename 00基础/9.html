@@ -1,18 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://unpkg.com/vue@next"></script>
-</head>
-<body>
-  <div id=''>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test">
+      <button @click="click" :class="{ active: isActive}" class="static">
+        动态修改属性
+      </button>
+      <span :class="classObject1" class="static"> 对象 绑定属性 </span>
+      <span :class="classObject"> 对象 属性计算 </span>
+      <hr />
+      <div :class="[activeClass, errorClass]">数组语法</div>
+      <div :class="classArray">数组语法</div>
+      <my-compoent class="baz" :class="classArray"></my-compoent>
+      <div :style="{color: activeColor, fontSize: fontSize}">样式测试1</div>
+      <div :style="styleObj">样式测试对象</div>
+      <div :style="[baseStyle, styleObj]">样式测试-数组语法</div>
+      <div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex']}">
+        样式测试-数组语法
+      </div>
+    </div>
 
-  </div>
-
-  <script>
-
-  </script>
-</body>
+    <script>
+      // Class 与 Style 绑定
+      const Test = {
+        data() {
+          return {
+            isActive: true,
+            classObject1: {
+              active: false,
+              'text-danger': false,
+            },
+            activeClass: 'active',
+            errorClass: 'text-danger',
+            activeColor: 'red',
+            fontSize: '20px',
+            styleObj: {
+              color: 'orange',
+            },
+            baseStyle: {
+              fontSize: '26px',
+            },
+          };
+        },
+        methods: {
+          click() {
+            this.isActive = !this.isActive;
+          },
+        },
+        computed: {
+          classObject() {
+            return {
+              active: this.isActive,
+              'text-danger2': false,
+            };
+          },
+          classArray() {
+            return [this.isActive && 'activeClass', 'text-danger'];
+          },
+        },
+        // template: `
+        //   <button @click="click" :class="{ active: isActive}" class="static">
+        //     动态修改属性
+        //   </button>
+        //   <span :class="classObject1" class="static"> 对象 绑定属性 </span>
+        //   <span :class="classObject"> 对象 属性计算 </span>
+        //   <hr>
+        //   <span :class="[activeClass, errorClass]">数组语法</span>
+        // `,
+      };
+      const app = Vue.createApp(Test);
+      app.component('my-compoent', {
+        template: `
+          <p :class="$attrs.class">HI</p>
+          <span>This is a child compoent</span>
+        `,
+      });
+      app.mount('#test');
+    </script>
+  </body>
 </html>
