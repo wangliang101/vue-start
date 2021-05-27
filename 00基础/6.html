@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://unpkg.com/vue@next"></script>
-</head>
-<body>
-  <div id=''>
-
-  </div>
-
-  <script>
-
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test"></div>
+    <script>
+      // 动态参数 缩写
+      const Test = {
+        data() {
+          return {
+            attributeName: 'href',
+            url: 'https://www.baidu.com',
+          };
+        },
+        template: `
+          <a v-bind:[attributeName]='url'>百度1</a>
+          <a :[attributeName]='url'>百度2</a>
+          <a @click='pop'>alert</a>
+        `,
+        methods: {
+          pop() {
+            alert(111);
+          },
+        },
+      };
+      Vue.createApp(Test).mount('#test');
+    </script>
+  </body>
 </html>
