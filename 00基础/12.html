@@ -1,18 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://unpkg.com/vue@next"></script>
-</head>
-<body>
-  <div id=''>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test">
+      <h1>组件基础</h1>
+      <div :style="{fontSize: postFontSize + 'px'}">
+        {{postFontSize}}
+        <blog-post
+          v-for="post in posts"
+          :key="post.id"
+          :title="post.title"
+          @enlarge="onEnlargeText"
+        ></blog-post>
+      </div>
+    </div>
 
-  </div>
-
-  <script>
-
-  </script>
-</body>
+    <script>
+      const Test = {
+        data() {
+          return {
+            posts: [
+              { id: 1, title: 'My journey with Vue' },
+              { id: 2, title: 'Blogging with Vue' },
+              { id: 3, title: 'Why Vue is so fun' },
+            ],
+            postFontSize: 10,
+          };
+        },
+        methods: {
+          onEnlargeText(size) {
+            this.postFontSize += size;
+          },
+        },
+      };
+      const app = Vue.createApp(Test);
+      app.component('blog-post', {
+        props: ['title'],
+        emits: ['enlarge'],
+        template: `
+          <h4>{{title}}</h4>
+          <button @click="$emit('enlarge', 6)">Enlarge text</button>
+        `,
+      });
+      app.mount('#test');
+    </script>
+  </body>
 </html>

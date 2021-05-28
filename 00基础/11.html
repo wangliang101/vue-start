@@ -8,16 +8,52 @@
   </head>
   <body>
     <div id="test">
+      <h1>事件处理</h1>
       <button @click="warn(msg, $event)">event传入</button>
       <button @click="warn(msg, $event), show()">多事件处理器</button>
+      <h1>表单处理</h1>
+      <input v-model="message" placeholder="add multiple lines"></input>
+      <p :title="message">{{ message }}</p>
+      <h1>复选框</h1>
+      <input type="checkbox" id="1" value="jack" v-model="nameList" />
+      <label for="1">jack</label>
+      <input type="checkbox" id="2" value="xiaoming" v-model="nameList" />
+      <label for="2">xiaoming</label>
+      <input type="checkbox" id="3" value="xiaoliang" v-model="nameList" />
+      <label for="3">xiaoliang</label>
+      <p>checked name: {{ nameList }}</p>
+      <h1>单选框</h1>
+      <input type="radio" id="one" value="One" v-model="picked" />
+      <label for="one">One</label>
+      <input type="radio" id="one" value="Two" v-model="picked" />
+      <label for="two">Two</label>
+      <p>picked: {{ picked }}</p>
+      <h1>选择框</h1>
+      <select v-model="selectedList">
+        <option disabled value="">please select one</option>
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+      </select>
+      <p>selected: {{ selectedList }}</p>
+      <h1>值绑定</h1>
+      <input type="checkbox" v-model="toggle" />
+      <button @click="changeChexkboxValue">改变选择框</button>
+      <input type="radio" v-model="pick" v-bind:value="b" />
     </div>
 
     <script>
-      // 事件处理
+      // 事件处理 表单处理
       const Test = {
         data() {
           return {
             msg: 'jjj',
+            message: 'dd',
+            nameList: [],
+            picked: 'One',
+            selected: 'A',
+            toggle: false,
+            pick: "2"
           };
         },
         methods: {
@@ -31,6 +67,9 @@
           show() {
             console.log('show');
           },
+          changeChexkboxValue(){
+            this.toggle = !this.toggle
+          }
         },
       };
       const vm = Vue.createApp(Test);
