@@ -7,11 +7,61 @@
   <script src="https://unpkg.com/vue@next"></script>
 </head>
 <body>
-  <div id=''>
-
+  <div id='test'>
+    <son-component v-bind="post" class='son'></son-component>
+    <custom-layout id='custom-layout' @click="changeValue"></custom-layout> 
   </div>
 
   <script>
+  // props
+  // string number boolean array object date fuction symbol
+  // type可以是自定义的构造函数，通过 instanceof 检查确认
+  // html attribute大小写不敏感 驼峰式写法需要使用短线分割命名 字符串模板无限制
+  // 非props的attribute
+  // 如果要禁止组件的根组件击沉attribute, 在子组件中设置 inheritAtts: false
+  const Test = {
+    data() {
+      return {
+        post: {
+          id: 1,
+          title: 'vue title',
+          status: 'ok'
+        }
+      }
+    },
+    methods: {
+      changeValue(){
+        console.log('changeValue')
+      }
+    },
+  }
+  const app = Vue.createApp(Test);
+  app.component('son-component', {
+    props: {
+      id: Number,
+      title: {
+        type: String,
+        default: 'vue title default',
+        require: true
+      },
+      status: {
+        type: String,
+        validator: function(value){
+          return ['ok', 'error'].includes(value)
+        }
+      }
+    },
+    template: `
+      <h2>{{ title }}</h2>
+    `
+  })
+  app.component('custom-layout', {
+    template: `
+      <header>头部</header>
+      <main v-bind="$attrs">main</main>
+    `
+  })
+  app.mount('#test')
 
   </script>
 </body>
