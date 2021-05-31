@@ -1,18 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://unpkg.com/vue@next"></script>
-</head>
-<body>
-  <div id=''>
-
-  </div>
-
-  <script>
-
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test">
+      <h1>验证抛出自定义事件</h1>
+      <custom-form @submit="sonSubmit"></custom-form>
+      <h1>v-model参数</h1>
+      <my-component v-model:foo='baz'></my-component>
+      {{baz}}
+      <h1>处理 v-model 修饰符</h1>
+      <model-component v-model.capitalize='baz'></model-component>
+    </div>
+    <script>
+      // 自定义组件
+      const Test = {
+        data() {
+          return {
+            baz:'qwe'
+          };
+        },
+        methods: {
+          sonSubmit({ email, password }) {
+            console.log('ll', email, password);
+          },
+        },
+      };
+      const app = Vue.createApp(Test);
+      app.component('custom-form', {
+        data() {
+          return {
+            email: '',
+            password: '',
+          };
+        },
+        emits: {
+          submit: ({ email, password }) => {
+            if (email && password) {
+              return true;
+            } else {
+              console.warn('Invalid submit event payload!');
+              return false;
+            }
+          },
+        },
+        methods: {
+          commitInfo({ email, password }) {
+            this.$emit('submit', { email, password });
+          },
+        },
+        template: `
+          <div>
+            <label>email</label>
+            <input type="text" v-model="email"/>
+            <br />
+            <label>passowrd</label>
+            <input type="text" v-model="password"/>
+            <br />
+            <button  @click="commitInfo({email, password})">提交</button>
+          </div>
+        `,
+      });
+      app.component('my-component', {
+        props:{
+          foo: String
+        },
+        template: `
+          <input 
+            type="text"
+            :value="foo"
+            @input="$emit('update:foo', $event.target.value)"
+          />
+        `
+      })
+      app.component('model-component', {
+        props: {
+          modelValue: String,
+          modelModifiers: {
+            default: () => {}
+          }
+        },
+        methods: {
+          emitValue(e){
+            let value = e.target.value;
+            if(this.modelModifiers.capitalize){
+              value = value.charAt(0).toUpperCase() + value.slice(1)
+            }
+            this.$emit('update:modelValue', value)
+          }
+        },
+        template: `
+          <input
+            type="text"
+            :value="modelValue"
+            @input="emitValue"
+          >
+        `
+      })
+      app.mount('#test');
+    </script>
+  </body>
 </html>
