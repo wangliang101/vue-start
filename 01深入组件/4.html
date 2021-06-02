@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test">
+      <button
+        v-for="tab in tabs"
+        :key="tab"
+        :class="['tab-button', {active: currentTab === tab}]"
+        @click="currentTab = tab"
+      >
+        {{ tab }}
+      </button>
+      <keep-alive>
+        <component :is="currentTabCom" class="tab"></component>
+      </keep-alive>
+    </div>
+
+    <script>
+      // 动态组件
+      const Test = {
+        data() {
+          return {
+            currentTab: 'Home',
+            tabs: ['Home', 'Posts', 'Archive'],
+          };
+        },
+        computed: {
+          currentTabCom() {
+            return `tab-${this.currentTab.toLowerCase()}`;
+          },
+        },
+      };
+      const app = Vue.createApp(Test);
+      app.component('tab-home', {
+        template: `<div>tab-home</div>`,
+      });
+      app.component('tab-posts', {
+        template: `<div>tab-posts</div>`,
+      });
+      app.component('tab-archive', {
+        data() {
+          return {
+            value: Math.random(),
+          };
+        },
+        methods: {
+          changeValue() {
+            this.value = Math.random();
+          },
+        },
+        template: `
+          <div>
+            <span>tab-Archive-{{value}}</span>
+            <button @click="changeValue">改变value</button>
+          </div>
+        `,
+      });
+      app.mount('#test');
+    </script>
+  </body>
+</html>

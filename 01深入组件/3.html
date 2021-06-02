@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test">
+      {{todos.length}}
+      <button @click="addArrLength">增加数组长度</button>
+      <todo-list></todo-list>
+    </div>
+
+    <script>
+      // 提供 注入
+      const Test = {
+        data() {
+          return {
+            todos: ['Feed a cat', 'Buy tickets'],
+          };
+        },
+        provide() {
+          return {
+            todoLength: Vue.computed(() => this.todos.length), // 有问题，为啥不是响应式
+          };
+        },
+        methods: {
+          addArrLength() {
+            this.todos.push(Math.random());
+          },
+        },
+      };
+      const app = Vue.createApp(Test);
+      app.component('todo-list', {
+        data() {
+          return {
+            list: ['Feed a cat', 'Buy tickets', 'kkk'],
+          };
+        },
+        provide() {
+          return {
+            listLength: this.list.length,
+          };
+        },
+        template: `
+              <div>
+                <span>todo-list</span>
+                <todo-list-footer></todo-list-footer>
+              </div>
+            `,
+      });
+      app.component('todo-list-footer', {
+        inject: ['todoLength', 'listLength'],
+        created() {
+          console.log(`Injected property: ${this.todoLength.value}`); // > 注入 property: John Doe
+        },
+        template: `
+              <div>
+                <span>todo-list-footer</span>
+                <span>{{todoLength.value}}</span>
+                <span>{{listLength}}</span>
+              </div>
+            `,
+      });
+      app.mount('#test');
+    </script>
+  </body>
+</html>

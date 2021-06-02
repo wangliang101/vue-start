@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test">
+      <base-input ref="usernameInput"></base-input>
+      <button @click="focususernameInput">parent focusInput</button>
+    </div>
+
+    <script>
+      // 模板引用
+      const Test = {
+        data() {
+          return {};
+        },
+        methods: {
+          focususernameInput() {
+            this.$refs.usernameInput.focusInput();
+          },
+        },
+      };
+      const app = Vue.createApp(Test);
+      app.component('base-input', {
+        template: `
+          <input ref="input" />
+          <button @click="focusInput">focusInput</button>
+        `,
+        methods: {
+          focusInput() {
+            this.$refs.input.focus();
+          },
+        },
+        // mounted() {
+        //   this.focusInput();
+        // },
+      });
+      app.mount('#test');
+    </script>
+  </body>
+</html>

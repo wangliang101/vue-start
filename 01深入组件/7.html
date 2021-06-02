@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test"></div>
+
+    <script>
+      // 强制更新  如果必须强制更新 使用$forceUpdate
+      // v-once指令确保只对组件求一次值，并且进行缓存
+      const Test = {
+        data() {
+          return {};
+        },
+      };
+      const app = Vue.createApp(Test);
+      app.mount('#test');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test">
+      <h1>具名插槽</h1>
+      <base-loyout>
+        <template v-slot:header>
+          <h3>Here might be a page title</h3>
+        </template>
+        <template v-slot:default>
+          <p>A paragraph for the main content.</p>
+          <p>And another one.</p>
+        </template>
+        <template v-slot:footer>
+          <p>Here's some contact info</p>
+        </template>
+      </base-loyout>
+      <h1>作用于插槽</h1>
+      <todo-list>
+        <template v-slot:default="slotProps">
+          <i class="fas fa-check"></i>
+          <span class="gren">{{ slotProps.item }}</span>
+        </template>
+      </todo-list>
+    </div>
+
+    <script>
+      // 插槽
+      // 插槽可以访问与模板其余部分相同的实例 property (即相同的“作用域”)
+      // 后备内容  默认填充
+      // 具名插槽 缩写  name="header" => #header
+      // 作用于插槽
+      const Test = {
+        data() {
+          return {};
+        },
+      };
+      const app = Vue.createApp(Test);
+      app.component('base-loyout', {
+        template: `
+          <div class="container">
+            <header>
+              <slot name="header"></slot>
+            </header>
+            <main>
+              <slot></slot>
+            </main>
+            <footer>
+              <slot name="footer"></slot>
+            </footer>
+          </div>
+        `,
+      });
+      app.component('todo-list', {
+        data() {
+          return {
+            items: ['Feed a cat', 'Buy milk'],
+          };
+        },
+        template: `
+          <ul>
+            <li v-for="(item, index) in items">
+              <slot :item="item"></slot>
+            </li>
+          </ul>
+        `,
+      });
+      app.mount('#test');
+    </script>
+  </body>
+</html>
