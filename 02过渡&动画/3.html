@@ -4,16 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      .fade-enter-active,
+      .fade-leave-active {
+        transition: opacity 1s ease;
+      }
+
+      .fade-enter-from,
+      .fade-leave-to {
+        opacity: 0;
+      }
+    </style>
     <script src="https://unpkg.com/vue@next"></script>
   </head>
   <body>
-    <div id="test"></div>
+    <div id="test">
+      <button @click="show = !show">toggle</button>
+      <transition name="fade">
+        <p v-if="show">hello</p>
+      </transition>
+    </div>
 
     <script>
-      // 提供 注入
+      // 单元素/组件的过渡
       const Test = {
         data() {
-          return {};
+          return {
+            show: true,
+          };
         },
       };
       const app = Vue.createApp(Test);

@@ -4,16 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      .mocearea {
+        transition: 0.2 background-color ease;
+      }
+    </style>
     <script src="https://unpkg.com/vue@next"></script>
   </head>
   <body>
-    <div id="test"></div>
+    <div id="test">
+      <div
+        @mousemove="xCoordinate"
+        :style="{ backgroundColor: `hsl(${x}, 80%, 50%)`}"
+        class="movearea"
+      >
+        <h3>Move your mouse across the screen</h3>
+        <p>x: {{ x }}</p>
+      </div>
+    </div>
 
     <script>
-      // 提供 注入
+      // 过渡与 Style 绑定
+      // perspective: 1000px backface-visibility: hidden transform: translateX(0) 可以让浏览器知道你需要硬件加速
+      // Timing  一般是0.1s - 0.4s 大多数情况下选择0.25s
       const Test = {
         data() {
-          return {};
+          return {
+            x: 0,
+          };
+        },
+        methods: {
+          xCoordinate(e) {
+            this.x = e.clientX;
+          },
         },
       };
       const app = Vue.createApp(Test);
