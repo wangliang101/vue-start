@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test"></div>
+
+    <script>
+      // 多个 <teleport> 组件可以将其内容挂载到同一个目标元素。顺序将是一个简单的追加
+      const Test = {
+        data() {
+          return {};
+        },
+        template: `
+          <h1>Root instance</h1>
+          <parent-component />
+        `
+      };
+      const app = Vue.createApp(Test);
+      app.component('parent-component', {
+        template: `
+          <h2>This is a parent component</h2>
+          <teleport to="body">
+            <child-component name="John" />
+          </teleport>
+        `
+      })
+      
+      app.component('child-component', {
+        props: ['name'],
+        template: `
+          <div>Hello, {{ name }}</div>
+        `
+      })
+      app.mount('#test');
+    </script>
+  </body>
+</html>

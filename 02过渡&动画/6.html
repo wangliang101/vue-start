@@ -7,14 +7,45 @@
     <script src="https://unpkg.com/vue@next"></script>
   </head>
   <body>
-    <div id="test"></div>
+    <div id="test">
+      <transition appear>
+        <table v-if="items.length > 0">
+          <tr>
+            <th v-for="item in items">{{item}}</th>
+          </tr>
+        </table>
+        <p v-else>Sorry, no items found.</p>
+      </transition>
+      <transition>
+        <button :key="docState">
+          {{buttonMSg}}
+        </button>
+      </transition>
+    </div>
 
     <script>
-      // 提供 注入
+      // 可以在 attribute 中声明 JavaScript 钩子
+      // 只用 JavaScript 过渡的时候，在 enter 和 leave 钩中必须使用 done 进行回调
+      // 可以通过 appear attribute 设置节点在初始渲染的过渡
       const Test = {
         data() {
-          return {};
+          return {
+            items: [1, 2, 3],
+            docState: 'saved'
+          };
         },
+        computed: {
+          buttonMSg(){
+            switch(this.docState){
+              case 'saved':
+                return "Edit"
+              case 'edited':
+                return "Save"
+              case 'editding':
+                return 'Cancel'
+            }
+          }
+        }
       };
       const app = Vue.createApp(Test);
       app.mount('#test');

@@ -7,14 +7,33 @@
     <script src="https://unpkg.com/vue@next"></script>
   </head>
   <body>
-    <div id="test"></div>
-
+    <div id="test">
+      <input v-model="number"  type="number" step="20"/>
+      <p>{{animatedNumber}}</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.4/gsap.min.js"></script>
     <script>
-      // 提供 注入
+      // 状态动画与侦听器
       const Test = {
         data() {
-          return {};
+          return {
+            number: 0,
+            tweenedNumber: 0
+          };
         },
+        computed:{
+          animatedNumber(){
+            return this.tweenedNumber.toFixed(0)
+          }
+        },
+        watch:{
+          number(newValue){
+            gsap.to(this.$data,{
+              duration: 0.5,
+              tweenedNumber: newValue
+            })
+          }
+        }
       };
       const app = Vue.createApp(Test);
       app.mount('#test');

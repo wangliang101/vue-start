@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test">
+      <h1>
+        <a name="hello-world" href="#hello-world">
+          Hello world!
+        </a>
+      </h1>
+      <anchored-heading :level="1">Hello world!1</anchored-heading>
+      <anchored-heading :level="1">Hello world!2</anchored-heading>
+      <anchored-heading :level="1">Hello world!3</anchored-heading>
+      <anchored-heading :level="1">Hello world!4</anchored-heading>
+      <anchored-heading :level="1">Hello world!5</anchored-heading>
+      <anchored-heading :level="1">Hello world!6</anchored-heading>
+      <anchored-heading :level="1">Hello world!7</anchored-heading>
+      <anchored-heading :level="1" id="hello-word">Hello world!8</anchored-heading>
+    </div>
+
+    <script>
+      // 
+      const Test = {
+        data() {
+          return {};
+        },
+      };
+      const app = Vue.createApp(Test);
+      app.component('anchored-heading', {
+        render() {
+          const {h} = Vue;
+          return h(
+            'h' + this.level,
+            this.$slots.default()
+          )
+        },
+        props:{
+          level:{
+            type:Number,
+            required: true,
+          }
+        }
+      })
+      app.mount('#test');
+    </script>
+  </body>
+</html>

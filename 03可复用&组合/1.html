@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="test"></div>
+
+    <script>
+      // 全局混入
+      // 一旦使用全局混入，它将影响每一个之后创建的组件
+      // vue2 mixin 是将部分组件逻辑抽象成可重用块的主要工具.但是他们存在两点问题
+      // mixin很容易冲突
+      // 可重用性是有限的
+      const app = Vue.createApp({
+        myOption: 'hello',
+        custom: 'hello world',
+        created() {
+          // console.log('created')
+        },
+      });
+      app.config.optionMergeStrategies.custom = (parent, child, vm) => {
+        console.log('000', parent, child, vm)
+        return parent || child
+      }
+      // 为自定义选项option注入一个处理器
+      app.mixin({
+        custom: 'goodbye',
+        created() {
+          console.log('111',this.$options.custom)
+          const myOption = this.$options.myOption
+          if(myOption){
+            // console.log(myOption)
+          }
+        },
+      })
+      app.mount('#test');
+    </script>
+  </body>
+</html>
