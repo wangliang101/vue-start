@@ -10,7 +10,8 @@
     <div id="test"></div>
 
     <script>
-      // 
+      // Ref 展开仅发生在被响应式 Object 嵌套的时候
+      const { ref } = Vue;
       const Test = {
         data() {
           return {};
