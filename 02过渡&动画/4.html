@@ -4,16 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.0/animate.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
     <script src="https://unpkg.com/vue@next"></script>
   </head>
   <body>
-    <div id="test"></div>
+    <div id="test">
+      <button @click="show = !show">Toggle render</button>
+      <transition
+        name="custom-classes-transition"
+        enter-active-class="animate__animated animate__bounce"
+        leave-active-class="animate__animated animate__bounceOutRight"
+      >
+        <p v-if="show">hello</p>
+      </transition>
+    </div>
 
     <script>
-      // 提供 注入
+      // CSS 动画用法同 CSS 过渡，区别是在动画中 v-enter-from 类名在节点插入 DOM 后不会立即删除，而是在 animationend 事件触发时删除。
+      // 自定义过渡class类名， 优先级高于普通类名 这对于过渡系统和第三方css动画库，十分有效
+      // 单独设置transitionend 或 animationend时，vue可以自动识别并设置监听，如果你两都用了，需要设置type为 animation 或者 transition
       const Test = {
         data() {
-          return {};
+          return {
+            show: true,
+          };
         },
       };
       const app = Vue.createApp(Test);
